@@ -1,0 +1,85 @@
+:root {
+  --colorTheme: #50b94c;
+}
+
+
+button {
+    height: 30px;
+    width: 100px;
+    outline: none;
+    margin: 10px;
+    border: none;
+    border-radius: 2px;
+  }
+  
+button.current {
+  box-shadow: 0 0 0 2px white,
+              0 0 0 4px black;
+}
+
+html,body {
+  background: #f2f2f2;
+}
+
+* {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 20px;
+}
+
+
+ul#container {
+  background: #fafafa;
+  padding: 10px;
+  margin: 0em;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  border-left: 0;
+}
+
+ul {
+  padding-left: 0.5em;
+  margin-left: 0.3em;
+  border-left: 3px solid #c0d1d1;
+  margin-bottom: 1em;
+  color: #212b2b;
+}
+
+li {
+  list-style-type: none;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+details summary {
+  cursor: pointer;
+}
+
+details summary {
+  color: var(--colorTheme);
+}
+
+details summary::-webkit-details-marker {
+  color: var(--colorTheme);
+  font-size: 18px;
+}
+
+details[open]>summary::-webkit-details-marker {
+  color: var(--colorTheme);
+}
+
+details[open]>summary {
+  color: var(--colorTheme);
+}
+
+
+div { display: table; margin: 4px; padding: 1px; box-sizing: border-box; }
+div.t {
+    display: table-cell;
+    width: 100%;
+}
+div.t > input {
+    width: 100%;
+    margin: 2px;
+    padding: 2px;
+    box-sizing: border-box; 
+}

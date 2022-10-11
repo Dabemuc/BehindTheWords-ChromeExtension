@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<ul id="test">testdiv</ul>
+<style>
+    html, body {
+    background: #f2f2f2;
+    }
+
+    * {
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif; 
+    font-size: 20px;
+    }
+
+
+
+    ul#test {
+    background: #fafafa;
+    padding: 10px;
+    margin: 2em;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.06);
+    border-radius: 4px;
+    border-left: 0;
+    }
+
+    ul {
+    padding-left: 0.5em;
+    margin-left: 0.3em;
+    border-left: 3px solid #c0d1d1;
+    margin-bottom: 1em;
+    color: #212b2b;
+    }
+
+    li {
+    list-style-type: none;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    }
+
+    details summary {
+    cursor: pointer;
+    }
+
+    details summary {
+    color: #4C74B9;
+    }
+
+    details summary::-webkit-details-marker {
+    color: #4C74B9;
+    font-size: 18px;
+    }
+
+    details[open] > summary::-webkit-details-marker {
+    color: #2b4b82;
+    }
+
+    details[open] > summary {
+    color: #2b4b82;
+    }
+
+
+</style>
+<script>
+    function httpGet(theUrl){
+        var xmlHttp = new XMLHttpRequest()
+        xmlHttp.open( "GET", theUrl, false ) // false for synchronous request
+        xmlHttp.send( null )
+        return xmlHttp.responseText
+    }
+    let result = httpGet("https://api.dictionaryapi.dev/api/v2/entries/en/test")
+    result = JSON.parse(result)
+    let list = document.getElementById("test")
+    list.innerHTML = convertJSONToHTML(0, result[0])
+
+
+
+    function convertJSONToHTML(depth, obj) {
+        let keys
+        let values
+        if(typeof obj === "object") {
+            keys = Object.keys(obj);
+            values = Object.values(obj);
+        }
+        final = ''
+
+        for(let i = 0; i < keys.length; i++){
+            //console.log(values[i])
+            if(!filterKey(keys[i]))continue
+
+            if (obj[keys[i]] instanceof(Array) && obj[keys[i]].length == 0) continue
+
+            if (typeof obj[keys[i]] !== "string" && obj[values[i]] !== "") {
+                if (obj[keys[i]] === "array") {console.log("ARRRAYYY mit Länge: " + obj[keys[i]].length); }
+                final += "<li><details><summary>" + keys[i] + ": </summary>"
+                final += "<ul id=" + depth + ">" + convertJSONToHTML(depth + 1, obj[keys[i]]) + "</ul>"
+                final += "</details></li>"
+            }
+            else {
+                if(isNaN(keys[i])) final += keys[i] + ": "
+                if (values[i].endsWith(".mp3")) {
+                    final += "<audio controls class='value'><source src='" + values[i] + "' type='audio/mpeg'>Your browser does not support the audio element.</audio>"
+                }
+                else if (values[i].startsWith("http")) final += "<a class='value' href='" + values[i] + "'>" + values[i] + "</a>"
+                else final += "<span class='value'>" + values[i] + "</span>"
+                final += "<br>"
+            }
+        }
+        return final
+    }
+
+    function filterKey(key){
+        switch (key) {
+            case "sourceUrl":
+                return false;
+            case "license":
+                return false;
+            case "word":
+                return false;
+            case "phonetic":
+                return false;
+            default:
+                return true;
+        }
+    }
+
+
+
+    
+</script>
