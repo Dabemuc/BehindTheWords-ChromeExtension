@@ -8,6 +8,11 @@ chrome.storage.sync.get("color", ({ color }) => {
     root.style.setProperty("--colorTheme", color)
 });
 
+//try to get a selected word from webpage
+setSelectedStringAsInput()
+
+
+
 // When the button is clicked or "enter" is pressed, query api and show informations
 searchButton.addEventListener("click", async () => {
     useFreeDictionaryApi()
@@ -23,7 +28,7 @@ function useFreeDictionaryApi(){
     if(inputField.value !== "") {
         let response = httpGet('https://api.dictionaryapi.dev/api/v2/entries/en/' + inputField.value);
         response = JSON.parse(response);
-        console.log(response)
+        //console.log(response)
         if(response.title !== "No Definitions Found")
             list.innerHTML = convertJSONToHTML(0, response[0])
         else 
@@ -88,4 +93,18 @@ function httpGet(theUrl){
     xmlHttp.open("GET", theUrl, false); // false for synchronous request
     xmlHttp.send( null );
     return xmlHttp.responseText;
+}
+
+async function setSelectedStringAsInput(){
+    const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+    let result;
+    try {
+        [{result}] = await chrome.scripting.executeScript({
+            target: {tabId: tab.id},
+            function: () => getSelection().toString(),
+        });
+    } catch (e) {
+        return; // ignoring an unsupported page like chrome://extensions
+    }
+    inputField.value = result
 }
